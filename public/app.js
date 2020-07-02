@@ -106,7 +106,7 @@ function drawTotal() {
         chart : {
             title: 'Total reported covid-19 cases in Santa Clara City'
         },
-        colors:["DarkSlateGray", "Gray"]
+        colors:["Navy", "Gray"]
     };
 
     chart_lines.draw(view, options);
@@ -143,7 +143,7 @@ function drawDaily(){
         chart : {
             title: 'Total reported covid-19 cases in Santa Clara City'
         },
-        colors:["DarkSlateGray", "Gray"]
+        colors:["Navy", "Gray"]
     };
 
     chart_lines.draw(view, options);
