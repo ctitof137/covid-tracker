@@ -38,13 +38,13 @@ function getGoogleData(data) {
         gdata.addColumn('number', 'Daily cases')
         gdata.addColumn('number', 'Daily cases (7 day average)')
 
-        gdata.addColumn('number', 'Total / Million')
-        gdata.addColumn('number', 'Daily cases / Million')
-        gdata.addColumn('number', 'Daily cases (7 day average) / Million')
+        gdata.addColumn('number', 'Total / million')
+        gdata.addColumn('number', 'Daily cases / million')
+        gdata.addColumn('number', 'Daily cases (7 day average) / million')
 
-        gdata.addColumn('number', 'Total County / Million')
-        gdata.addColumn('number', 'Daily cases County / Million')
-        gdata.addColumn('number', 'Daily cases County (7 day average) / Million')
+        gdata.addColumn('number', 'Total County / million')
+        gdata.addColumn('number', 'Daily cases County / million')
+        gdata.addColumn('number', 'Daily cases County (7 day average) / million')
 
         let prev_total = data.entries[data.dates[0]].total
         let prev_county_total = data.entries[data.dates[0]].county_total
@@ -66,8 +66,8 @@ function getGoogleData(data) {
             let avg_county7 = Math.round((avg_county.reduce((acc, c) => acc + c, 0) / avg_county.length) *10)/10
 
             gdata.addRow([date, data.entries[date].total, extrap ? 'E' : null, extrap ? 'Missing data, total extrapolated' : null, delta, avg7,
-                                data.entries[date].total/city_ratio, delta/city_ratio, avg7/city_ratio,
-                                data.entries[date].county_total/county_ratio, delta_county/county_ratio, avg_county7/county_ratio,
+                                Math.round(data.entries[date].total/city_ratio*10)/10, Math.round(delta/city_ratio*10)/10, Math.round(avg7/city_ratio*10)/10,
+                                Math.round(data.entries[date].county_total/county_ratio*10)/10, Math.round(delta_county/county_ratio*10)/10, Math.round(avg_county7/county_ratio*10)/10,
                             ])
             prev_total = data.entries[date].total
             prev_county_total = data.entries[date].county_total
@@ -93,11 +93,10 @@ function drawTotal() {
 
 
     let options = {
-        legend: { textStyle: { fontSize: 16, bold: true } , position: 'bottom'},
+        legend: { textStyle: { fontSize: 12, bold: true } , position: 'bottom'},
         vAxis: {  gridlines: {count: 0}},
         vAxis: {
                 title:'Total cases',
-                textStyle: {color: 'blue'},
                 minValue: 0
         },
         hAxis: { title: "Date" },
@@ -107,6 +106,7 @@ function drawTotal() {
         chart : {
             title: 'Total reported covid-19 cases in Santa Clara City'
         },
+        colors:["DarkSlateGray", "Gray"]
     };
 
     chart_lines.draw(view, options);
@@ -130,21 +130,20 @@ function drawDaily(){
 
 
     let options = {
-        legend: { textStyle: { fontSize: 14, bold: true } , position: 'bottom'},
+        legend: { textStyle: { fontSize: 12, bold: true } , position: 'bottom'},
         vAxis: {  gridlines: {count: 0}},
         vAxis: {
-                title:'Total cases',
-                textStyle: {color: 'blue'},
+                title:'Daily cases',
                 minValue: 0
         },
         hAxis: { title: "Date" },
-        intervals: { "color": "series-color" },
         enableInteractivity: true,
         focusTarget : 'category',
         curveType: average ? 'function' : 'none',
         chart : {
             title: 'Total reported covid-19 cases in Santa Clara City'
         },
+        colors:["DarkSlateGray", "Gray"]
     };
 
     chart_lines.draw(view, options);
