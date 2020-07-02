@@ -35,20 +35,23 @@ function getData(){
                         let start_date = '12/31/2020'
                         let end_date = '1/1/2020'
                         result.split('Update ').forEach( (val, i) => {
-                            val = val.replace('\n', ' ').replace(/\s\s+/g, ' ')
-                            let m = val.match(/^(\d+)\/(\d+)\/2020:.* (\d+) confirmed COVID-19 cases in the city of Santa Clara/)
+                            val = val.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s\s+/g, ' ')
+                            let m = val.match(/^(\d+)\/(\d+)\/2020:.*The County of Santa Clara Department of Public Health.* for a total of (\d+,?\d+) with .* deaths .* (\d+) confirmed COVID-19 cases in the city of Santa Clara/)
                             if (m){
                                 let date = m[1]+'/'+m[2]+'/2020'
-                                ret[date] = {total: parseInt(m[3])}
+                                ret[date] = {total: parseInt(m[4]), county_total : parseInt(m[3].replace(',',''))}
                                 if (compareDates(start_date, date) > 0) start_date = date
                                 if (compareDates(end_date, date) < 0) end_date = date
                             }
                         })
 
+                        if (compareDates(start_date, '4/28/2020') < 0) start_date = '4/28/2020' //too little data and many gaps before that date,just ignore it
+
                         // fill date gaps
                         let dates = []
                         let backtrack = []
                         let prev_total = NaN
+                        let prev_county_total = NaN
                         for (let m = 1; m<=12; m++){
                             let date = null
                             for (let d = 1; d<=31; d++){
@@ -57,17 +60,20 @@ function getData(){
                                 if (compareDates(date,start_date) >= 0 && compareDates(date,end_date) <= 0){
                                     if (!( date in ret)){
                                         backtrack.push(date)
-                                        ret[date] = {'total': NaN, 'extrapolated':false}
+                                        ret[date] = {'total': NaN, county_total: NaN, 'extrapolated':false}
                                     } else {
                                         let tot = ret[date].total
-                                        let delta = (tot - prev_total)/(backtrack.length+1)
+                                        let county_tot = ret[date].county_total
                                         backtrack.forEach((val, i) => {
                                             let delta = (tot - prev_total)/(backtrack.length+1)*(i+1)
-                                            ret[backtrack[i]].total = prev_total+delta
+                                            let county_delta = (county_tot - prev_county_total)/(backtrack.length+1)*(i+1)
+                                            ret[backtrack[i]].total = Math.floor(prev_total+delta)
+                                            ret[backtrack[i]].county_total = Math.floor(prev_county_total+county_delta)
                                             ret[backtrack[i]].extrapolated = true
                                         })
                                         backtrack = []
                                         prev_total = tot
+                                        prev_county_total = county_tot
                                     }
                                     dates.push(date)
                                 }
@@ -76,7 +82,7 @@ function getData(){
                                 break
                             }
                         }
-                        resolve({dates, entries: ret})
+                        resolve({city: 'Santa Clara City', county: "Santa Clara County", city_count: 130000, county_count: 1928000, dates, entries: ret})
                     } else {
                         reject('Invalid status code:' + res2.statusCode)
                     }

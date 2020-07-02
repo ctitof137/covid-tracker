@@ -1,20 +1,17 @@
 const express = require('express')
-
 const scdata = require('./santa_clara_data')
-
 const app = express()
-
 const port = process.env.PORT || 3000
 
 app.use(express.static('public'))
 
-var data2send = {}
+var citydata = {}
 function refreshData() {
     scdata.getData().then((results)=>{
-        console.log('Data refreshed')
-        data2send['Santa Clara City'] = results
+        console.log('Data refreshed for Santa Clara')
+        citydata['santaclara'] = results
     }).catch((e)=>{
-        console.log('Error:', e)
+        console.log('Error refreshing for Santa Clara:', e)
     })
 }
 
@@ -23,12 +20,12 @@ app.get('/', (req, res) => {
 })
 
 
-app.get('/covids/:id', (req, res) => {
-    const city = req.params.id
-    if (city in data2send){
-        res.jsonp({city, results :data2send[req.params.id]})
+app.get('/covids/:city', (req, res) => {
+    const city = req.params.city
+    if (city in citydata){
+        res.jsonp(citydata[city])
     } else {
-        res.status(201).jsonp({city, error : 'Results not available'})
+        res.status(201).jsonp({city: city, error : 'Results not available'})
     }
 })
 

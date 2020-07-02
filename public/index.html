@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous"></script>
+
     <script src="/app.js"></script>
+    <link rel="stylesheet" href="/app.css">
 </head>
+
 <body>
-    <h1>Santa Clara City covid-19 cases tracker!</h1>
-    <div id='chart'></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="text-center col-10 col-offset-1">
+                <h1>Santa Clara City covid-19 cases tracker</h1>
+                <p>This website gathers data from the official <a href="http://www.santaclaraca.gov/i-want-to/stay-informed/current-topics/coronavirus-updates">Santa Clara City</a> 
+                    website and creates a couple of graphs. These graphs help understand the data and trends over time.</p>
+                <p>Use the option to normlize per million to show the results per million inhabitant. This allows to add more data for comparison. Currently, data from Santa Clara County is used as well.</p>
+            </div>
+            <div class="col-10 col-offset-1">
+                <hr />
+            </div>
+            <div id='data-buttons'>
+                <button class="btn btn-sm btn-info">Show absolute numbers</button>
+                <button class="btn btn-sm btn-outline-info">Normalize per million</button>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-10 col-offset-1">
+                <div id="chart_total" class="chart"></div>
+            </div>
+            <div class="col-10 col-offset-1">
+                <div id="chart_daily" class="chart"></div>
+            </div>
+            <div id='daily-buttons'>
+                <button class="btn btn-sm btn-info">Show 7 day average</button>
+                <button class="btn btn-sm btn-outline-info">Show instant</button>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
- 
