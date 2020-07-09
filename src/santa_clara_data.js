@@ -36,7 +36,7 @@ function getData(){
                         let end_date = '1/1/2020'
                         result.split('Update ').forEach( (val, i) => {
                             val = val.replace(/(\r\n|\n|\r)/gm,' ').replace(/\s\s+/g, ' ')
-                            let m = val.match(/^(\d+)\/(\d+)\/2020:.*The County of Santa Clara Department of Public Health.* for a total of (\d+,?\d+) with .* deaths .* (\d+) confirmed COVID-19 cases in the city of Santa Clara/)
+                            let m = val.match(/^(\d+)\/(\d+)\/2020:.*The County of Santa Clara Department of Public Health.* for a total of (\d+,?\d+),? with .* deaths .* (\d+) confirmed COVID-19 cases in the city of Santa Clara/)
                             if (m){
                                 let date = m[1]+'/'+m[2]+'/2020'
                                 ret[date] = {total: parseInt(m[4]), county_total : parseInt(m[3].replace(',',''))}
